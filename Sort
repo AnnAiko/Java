@@ -1,0 +1,139 @@
+ //По возрастанию
+    public void upSort(int[] mas){
+        int k,j,step;
+        //Метод Пузырька
+        if (jRadioButton3.isSelected()==true){
+        jTextField4.setText("");
+        jTextField5.setText("");
+            for (int i=0; i<mas.length-1;i++) {
+                for (j=0;j<mas.length-i-1;j++) {
+                    sravnenie++;
+                    if (mas[j]>mas[j+1]) {
+                        k=mas[j];
+                        mas[j]=mas[j+1];
+                        mas[1+j]=k;
+                        perestanovka++;
+                    }
+                }
+            } 
+        jTextField5.setText(String.valueOf(perestanovka)); 
+        jTextField4.setText(String.valueOf(sravnenie)); 
+        }  
+        //Простого включения 
+        if (jRadioButton4.isSelected()==true){
+        jTextField6.setText("");
+        jTextField7.setText("");
+           for (int i=0; i<mas.length-1;i++) {
+            sravnenie++;
+            if (mas[i] > mas[i + 1]){
+                k=mas[i+1];
+                mas[i+1]=mas[i];
+                j=i;
+                sravnenie++;
+                while ((j>0) && (k<mas[j-1])) {
+                    sravnenie++;
+                    perestanovka++;
+                    mas[j]=mas[j-1];
+                    j--;
+                }
+                mas[j]=k;
+                perestanovka++;
+                }
+            }
+        jTextField6.setText(String.valueOf(sravnenie));
+        jTextField7.setText(String.valueOf(perestanovka));       
+        }
+        //Сортировка Шелла
+        if (jRadioButton5.isSelected()==true){
+        jTextField8.setText("");
+        jTextField9.setText("");
+            step=mas.length/2;
+            while(step>0){
+                for (int i=step; i<mas.length;i++) {
+                k=mas[i];
+                sravnenie++;
+                for (j=i-step; (j >= 0) && (mas[j] >k); j -= step){
+                    sravnenie++;
+                    perestanovka++;
+                    mas[j+step]=mas[j];
+                }
+                mas[j+step]=k;
+                }
+                step/=2;
+            }
+        jTextField8.setText(String.valueOf(sravnenie));
+        jTextField9.setText(String.valueOf(perestanovka));
+        }
+        
+        
+         //Сортировка Хоара
+        if (jRadioButton6.isSelected()==true){
+        jTextField10.setText("");
+        jTextField11.setText("");
+        upHoara(number,number.length,number.length-1,0);
+        jTextField10.setText(String.valueOf(sravnenie));
+        jTextField11.setText(String.valueOf(perestanovka));
+        }
+        //Сортировка шейкерная
+        if (jRadioButton7.isSelected()==true){
+        jTextField12.setText("");
+        jTextField13.setText("");
+        int left = 0; // левая граница
+        int right = mas.length - 1; // правая граница
+        do {
+            for (int i=left; i<right;i++) {
+                sravnenie++;
+                if(mas[i] > mas[i+1])
+                {
+                    k= mas[i];
+                    mas[i] = mas[i+1];
+                    mas[i+1] = k;
+                    perestanovka++;
+                }
+            }
+            right--;
+            for (j=right; j>left; j--) {
+                sravnenie++;
+                if(mas[j] < mas[j-1])
+                {
+                    k= mas[j];
+                    mas[j] = mas[j-1];
+                    mas[j-1] = k;
+                    perestanovka++;
+                }
+            }
+        left++;
+        }while (left <= right);
+        jTextField12.setText(String.valueOf(sravnenie));
+        jTextField13.setText(String.valueOf(perestanovka));
+        }
+        outputMas(mas);
+    }
+    
+    //Сортировка Хоара по возрастанию
+    public void upHoara (int[] mas,int n,int top,int bottom){
+        int i,j,k;
+        boolean str;
+        i=bottom;
+        j=top;
+        str = false;
+        while(i<j){
+            sravnenie++;
+            if (mas[i]>mas[j]) {
+                k= mas[i];
+                mas[i] = mas[j];
+                mas[j] = k;
+                str = !str;
+                perestanovka++;
+            }
+            if (str){
+                i++;
+            }else {
+                j--;
+            }
+        }
+        if ((i>1) && ((i-1)>bottom)) 
+            upHoara(mas,n,i-1,bottom);
+        if ((j<(n-1)) && ((j+1)<top))
+            upHoara(mas,n,top,j+1);
+   }
