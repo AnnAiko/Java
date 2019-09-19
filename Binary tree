@@ -1,0 +1,152 @@
+package main;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        File file = new File("D:/User/Desktop/tree.txt");
+        BinaryTree tree = new BinaryTree();
+        String[] id=new String[1];
+        if (file.exists()){
+        try
+        {
+            FileInputStream fstream = new FileInputStream(file);
+            BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+            String strLine;
+            /*Чтение файла*/
+            while((strLine = br.readLine()) != null){
+               tree.insert(strLine);
+            }
+            br.close();
+            } catch (Exception e) {
+            e.printStackTrace();}  
+        }
+        //вывод дерева
+        tree.printTree();
+        //поиск элемента дерева
+        Scanner in = new Scanner(System.in);
+        System.out.print("Искать элемент: ");
+        String str=in.nextLine();
+        System.out.println(tree.search(str));
+    }
+}
+
+package main;
+
+public class BinaryTree {
+    Node root;
+    /*Добавить идентификатор в дерево*/
+    public void insert(String value){
+        //объект класса Node
+        Node node = new Node(value);
+        //присвоить значение
+        node.value = value;
+        //если корень пустой
+        if(root==null){
+            //присвоить текущий идентификатор
+            root = node;
+            //иначе
+        }else{
+            //сделать идентификатор текущим
+            Node current = root;
+            //сделать следующий идентификатор пустым
+            Node prev = null;
+            while (true){
+                prev = current;
+                //если очередной идентификатор мешьне текущего
+                if(value.compareTo(prev.value)>0){
+                    //присвоить левую вершину текущего элемента
+                    current = current.leftChild;
+                    //левая вершина пустая
+                    if(current==null){
+                        //записать идентификатор
+                        prev.leftChild = node;
+                        return;
+                    }
+                //иначе
+                }else{
+                    //присвоить правую вершину текущего элемента
+                    current = current.rightChild;
+                    //правая вершина пустая
+                    if(current==null){
+                        //записать идентификатор
+                        prev.rightChild = node;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    /*Поиск элемента в дереве по ключу*/
+    public String search(String value){
+        //присвоть текущему узлу корень дерева
+        Node current = root;
+        //пока текущий не будет равен заданному 
+        while(current.value.equals(value)){
+            //если заданный идентификатор мешьне текущего
+            if(current.value.compareTo(value)>0){
+                //левая вершина не пустая
+                if(current!=null){
+                //присвоить левую вершину текущего элемента 
+                current = current.leftChild;
+                }
+            }else{
+               //правая вершина не пустая
+                if(current!=null){
+                //присвоить правую вершину текущего элемента
+                current = current.rightChild;
+                }
+            }
+            //если элемент не найден
+            if(current==null){
+                return "Элемент не найден " + value;
+                }
+            }
+        //элемент найден
+        return "Элемент найден " + value;
+    }
+    /*Вывод всех элементов дерева*/
+    public void print(Node startNode){
+        //если корень не пустой
+        if(startNode != null){
+        //если левая вершина не пустая
+        if (startNode.leftChild != null) {
+            System.out.println("Вершина: " + startNode.value +" "+ "Левая вершина: " + startNode.leftChild.value);
+            print(startNode.leftChild);
+        }
+        //если правая вершина не пустая
+           if (startNode.rightChild != null) {
+            System.out.println("Вершина: " + startNode.value + " "+"Правая вершина: " + startNode.rightChild.value);
+            print(startNode.rightChild);
+            }
+        }
+    }
+    /*метод вывода дерева*/
+    public void printTree() {
+        System.out.println("Корень: "+root.value);
+        print(root);
+    }
+}
+
+package main;
+
+public class Node {
+    //идентификатор
+    public String value; 
+    //левый потомок
+    public Node leftChild; 
+    //правый потомок
+    public Node rightChild; 
+    //Конструктор
+    public Node(String value) {
+      this.value = value;
+    }
+    /*Метод для сравнения идентификаторов*/
+        public int compareTo(Node node) {
+            return this.value.compareTo(node.value);
+        }
+}
